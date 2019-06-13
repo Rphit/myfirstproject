@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add A New League</title>
+
+<link rel="stylesheet" href="./Css/style.css"  />
+<script type="text/javascript" src="javascript/app.js"></script>
+</head>
+
+</head>
+<body>
+	<form action="add_league.do" method="post">
+		<table id="table-1">
+		
+			<tbody>
+				<tr>
+					<td>Year</td>
+					<td>
+						
+						<input  name="year" placeholder="enter league year" type="text"/>
+					</td>
+					
+				</tr>
+				<tr>
+					<td>Season</td>
+					<td>
+						<select name="season">
+							<option value="UNKNOWN">Select...</option>
+							<option value="Spring">Spring</option>
+							<option value="Winter">Winter</option>
+						</select>
+					</td>
+					
+				</tr>
+				<tr>
+					<td>Title</td>
+					<td>
+						
+						<input  name="title" placeholder="enter league title" type="text"/>
+					</td>
+					
+				</tr>
+				<tr>
+					
+					<td>
+						
+						<input    type="submit" value="Add League" onclick="return validateForm()"  />
+					</td>
+					
+				</tr>
+			</tbody>
+			
+		</table>
+	
+	
+	</form>
+</body>
+</html>
