@@ -1,0 +1,352 @@
+Normal---
+
+1---->
+mysql> select member_id,member_name,city,membership_status 
+	from lms_members 
+	where membership_status= 'Permanent';
++-----------+-------------+-----------+-------------------+
+| member_id | member_name | city      | membership_status |
++-----------+-------------+-----------+-------------------+
+| LM003     | GAYAN       | CHENNAI   | Permanent         |
+| LM008     | VANITA      | HYDERABAD | Permanent         |
++-----------+-------------+-----------+-------------------+
+
+
+
+2---->
+mysql> select book_code,publication,price,supplier_name 
+	from lms_book_details 
+	join lms_suppliers_details 
+	where book_code=any(select max(book_code) 
+	from lms_book_details);
++-----------+-------------------+-------+----------------------+
+| book_code | publication       | price | supplier_name        |
++-----------+-------------------+-------+----------------------+
+| BL000012  | Tata Mcgraw Hill  |   775 | SINGAPORE SHOPPEE    |
+| BL000012  | Tata Mcgraw Hill  |   775 | JK STORES            |
+| BL000012  | Tata Mcgraw Hill  |   775 | ROSE BOOK STORE      |
+| BL000012  | Tata Mcgraw Hill  |   775 | KAVARI STORE         |
+| BL000012  | Tata Mcgraw Hill  |   775 | EINSTEN BOOK GALLARY |
+| BL000012  | Tata Mcgraw Hill  |   775 | AKBAR STORE          |
+| BL000012  | Tata Mcgraw Hill  |   775 | READ MORE GALLERY    |
++-----------+-------------------+-------+----------------------+
+
+
+3---->
+mysql> select b.member_id,m.member_name
+    -> from lms_members m join lms_book_issue b
+    -> on m.member_id=b.member_id
+    -> where book_code='BL000002';
++-----------+-------------+
+| member_id | member_name |
++-----------+-------------+
+| LM002     | ABDHUL      |
++-----------+-------------+
+
+4---->
+mysql> select book_code,book_title,author 
+	from lms_book_details 
+	where author like 'p%';
++-----------+------------------------+----------------+
+| book_code | book_title             | author         |
++-----------+------------------------+----------------+
+| BL000001  | Java How To Do Program | Paul J. Deitel |
+| BL000003  | Java How To Do Program | Paul J. Deitel |
+| BL000005  | Java How To Do Program | Paul J. Deitel |
++-----------+------------------------+----------------+
+
+
+5---->
+	select count(category) as no_of_books 
+	from lms_book_details 
+	where category='java';
++-------------+
+| no_of_books |
++-------------+
+|           7 |
++-------------+
+
+
+
+6---->
+
+mysql> select category, count(category) as no_of_books 
+	from lms_book_details 
+	group by category;
++----------+-------------+
+| category | no_of_books |
++----------+-------------+
+| JAVA     |           7 |
+| C        |           3 |
+| SQL      |           2 |
++----------+-------------+
+
+
+7----->
+
+mysql> select count(publication) as no_of_books 
+	from lms_book_details 
+	where publication='prentice hall';
++-------------+
+| no_of_books |
++-------------+
+|           3 |
++-------------+
+
+
+8---->
+
+
+mysql> select b.book_code,bb.book_title 
+	from lms_book_details bb join lms_book_issue b 
+	on b.book_code=bb.book_code
+    	where date_issue='2012-04-01';
++-----------+------------------------+
+| book_code | book_title             |
++-----------+------------------------+
+| BL000007  | Let Us C               |
+| BL000005  | Java How To Do Program |
++-----------+------------------------+
+
+9---->
+
+mysql> select member_id,member_name,date_register,date_expire 
+	from lms_members 
+	where date_format(date_expire, '%Y-%m')<'2013-04';
++-----------+-------------+---------------+-------------+
+| member_id | member_name | date_register | date_expire |
++-----------+-------------+---------------+-------------+
+| LM001     | AMIT        | 2012-02-12    | 2013-02-11  |
+| LM005     | GURU        | 2012-03-30    | 2013-03-29  |
++-----------+-------------+---------------+-------------+
+
+10----->
+
+
+mysql> select member_id,member_name,date_register,membership_status 
+	from lms_members 
+	where date_format(date_register, '%Y-%m')<'2012-03'
+	and membership_status='temporary';
++-----------+-------------+---------------+-------------------+
+| member_id | member_name | date_register | membership_status |
++-----------+-------------+---------------+-------------------+
+| LM001     | AMIT        | 2012-02-12    | Temporary         |
++-----------+-------------+---------------+-------------------+
+
+
+11----->
+
+mysql>  select member_id,member_name as name 
+	from lms_members
+	 where city='chennai' or city='delhi';
++-----------+--------+
+| member_id | name   |
++-----------+--------+
+| LM001     | AMIT   |
+| LM002     | ABDHUL |
+| LM003     | GAYAN  |
+| LM004     | RADHA  |
+| LM006     | MOHAN  |
+| LM007     | HARISH |
++-----------+--------+
+
+
+12---->
+
+mysql> select concat(book_title,' is written by ', author) as BOOK_WRITTEN_BY 
+	from lms_book_details 
+	group by book_title;
++-------------------------------------------------------------+
+| BOOK_WRITTEN_BY                                             |
++-------------------------------------------------------------+
+| Java How To Do Program is written by Paul J. Deitel         |
+| Java: The Complete Reference  is written by Herbert Schildt |
+| Let Us C is written by Yashavant Kanetkar                   |
+| Data Structure Through C is written by Yashavant Kanetkar   |
+| MYSQL In A Nutshell is written by Russell J. T. Dyer        |
++-------------------------------------------------------------+
+
+
+13---->
+
+
+mysql> select avg(price) as AVERAGE_PRICE 	
+	from lms_book_details 
+	where category='java';
++---------------+
+| AVERAGE_PRICE |
++---------------+
+|      689.2857 |
++---------------+
+
+14---->
+
+mysql> select supplier_id,supplier_name,email 
+	from lms_suppliers_details 
+	where email like '%gmail.com';
++-------------+-------------------+----------------+
+| supplier_id | supplier_name     | email          |
++-------------+-------------------+----------------+
+| S01         | SINGAPORE SHOPPEE | sing@gmail.com |
+| S03         | ROSE BOOK STORE   | rose@gmail.com |
+| S07         | READ MORE GALLERY | rmg@gmail.com  |
++-------------+-------------------+----------------+
+
+
+15---->
+
+mysql> select supplier_id,supplier_name , 
+	coalesce(contact,email,address) as contact_details 
+	from lms_suppliers_details;
++-------------+----------------------+-----------------+
+| supplier_id | supplier_name        | contact_details |
++-------------+----------------------+-----------------+
+| S01         | SINGAPORE SHOPPEE    | 9894123555      |
+| S02         | JK STORES            | 9940123450      |
+| S03         | ROSE BOOK STORE      | 9444411222      |
+| S04         | KAVARI STORE         | 8630001452      |
+| S05         | EINSTEN BOOK GALLARY | 9542000001      |
+| S06         | AKBAR STORE          | 7855623100      |
+| S07         | READ MORE GALLERY    | 9085167321      |
++-------------+----------------------+-----------------+
+
+16---->
+
+mysql> select supplier_id, supplier_name, 
+	if(contact is not null, 'yes', 'no') address_available 
+	from lms_suppliers_details;
++-------------+----------------------+-------------------+
+| supplier_id | supplier_name        | phoneNo._available |
++-------------+----------------------+-------------------+
+| S01         | SINGAPORE SHOPPEE    | no                |
+| S02         | JK STORES            | yes               |
+| S03         | ROSE BOOK STORE      | yes               |
+| S04         | KAVARI STORE         | yes               |
+| S05         | EINSTEN BOOK GALLARY | yes               |
+| S06         | AKBAR STORE          | yes               |
+| S07         | READ MORE GALLERY    | yes               |
++-------------+----------------------+-------------------+
+
+17---->
+
+mysql> select m.member_id,m.member_name,m.city,m.membership_status,sum(f.fine_amount) fine 
+	from lms_members m 
+	join lms_book_issue i 
+	on m.member_id =i.member_id 
+	join lms_fine_details f 
+	on i.fine_range=f.fine_range
+	GROUP BY m.MEMBER_ID, m.MEMBER_NAME, m.CITY;
++-----------+-------------+-----------+-------------------+------+
+| member_id | member_name | city      | membership_status | fine |
++-----------+-------------+-----------+-------------------+------+
+| LM001     | AMIT        | CHENNAI   | Temporary         |   20 |
+| LM005     | GURU        | BANGALORE | Temporary         |   20 |
+| LM007     | HARISH      | DELHI     | Temporary         |   20 |
+| LM003     | GAYAN       | CHENNAI   | Permanent         |  120 |
+| LM004     | RADHA       | CHENNAI   | Temporary         |   20 |
+| LM002     | ABDHUL      | DELHI     | Temporary         |   50 |
++-----------+-------------+-----------+-------------------+------+
+
+
+
+---------------------------------------------------------------------------------AVERAGE-----------------------------------------------------------------------------------------------------
+
+
+
+1----->
+
+mysql> 	select m.member_id,m.member_name,b.book_code,bb.book_title
+	from lms_book_issue b 
+	join lms_members m 
+	on b.member_id = m.member_id 
+	join lms_book_details bb 
+	on b.book_code = bb.book_code;
++-----------+-------------+-----------+-------------------------------+
+| member_id | member_name | book_code | book_title                    |
++-----------+-------------+-----------+-------------------------------+
+| LM001     | AMIT        | BL000001  | Java How To Do Program        |
+| LM001     | AMIT        | BL000006  | Java: The Complete Reference  |
+| LM002     | ABDHUL      | BL000002  | Java: The Complete Reference  |
+| LM003     | GAYAN       | BL000007  | Let Us C                      |
+| LM003     | GAYAN       | BL000007  | Let Us C                      |
+| LM004     | RADHA       | BL000005  | Java How To Do Program        |
+| LM005     | GURU        | BL000008  | Let Us C                      |
+| LM005     | GURU        | BL000008  | Let Us C                      |
+| LM007     | HARISH      | BL000012  | Java: The Complete Reference  |
+| LM007     | HARISH      | BL000005  | Java How To Do Program        |
++-----------+-------------+-----------+-------------------------------+
+
+
+
+
+2---->
+
+
+mysql> select (count(bb.book_code) - count(b.book_code)) as book_available 
+	from lms_book_details bb 
+	left outer join lms_book_issue b 
+	on bb.book_code=b.book_code;
++----------------+
+| book_available |
++----------------+
+|              5 |
++----------------+
+
+
+ANS: SELECT T1.MEMBER_ID,(SELECT MEMBER_NAME FROM LMS_MEMBERS WHERE MEMBER_ID=T1.MEMBER_ID)AS MEMBER_NAME,(SELECT T2.FINE_RANGE FROM LMS_MEMBERS WHERE MEMBER_ID=T1.MEMBER_ID)AS FINE_RANGE,(SELECT FINE_AMOUNT FROM LMS_FINE_DETAILS T2 WHERE FINE_RANGE= T1.FINE_RANGE)AS FINE_AMOUNT FROM LMS_BOOK_ISSUE T1 LEFT JOIN LMS_FINE_DETAILS T2 ON T1.FINE_RANGE = T2.FINE_RANGE WHERE T2.FINE_AMOUNT < 100
+
+Problem # 4:
+Write a query to display the book code, book title, publisher, edition, price and year of publication and sort based on year of publication, publisher and edition.
+ANS: SELECT BOOK_CODE,BOOK_TITLE,PUBLICATION,BOOK_EDITION,PRICE,YEAR(PUBLISH_DATE) AS YEAR_OF_PUBLICATION FROM LMS_BOOK_DETAILS ORDER BY YEAR_OF_PUBLICATION
+Problem # 5:
+Write a query to display the book code, book title and rack number of the books which are placed in rack 'A1' and sort by book title in ascending order. 
+ANS: SELECT BOOK_CODE,BOOK_TITLE,RACK_NUM FROM LMS_BOOK_DETAILS where RACK_NUM='A1' ORDER BY BOOK_TITLE ASC
+
+Problem # 6:
+Write a query to display the member id, member name, due date and date returned of the members who has returned the books after the due date. Hint: Date_return is due date and Date_returned is actual book return date. 
+ANS: SELECT MEMBER_ID,(SELECT MEMBER_NAME FROM LMS_MEMBERS WHERE MEMBER_ID=T1.MEMBER_ID)AS MEMBER_NAME,DATE_RETURN AS DUE_DATE,DATE_RETURNED FROM LMS_BOOK_ISSUE T1 WHERE DATE_RETURN < DATE_RETURNED
+
+Problem # 7:
+Write a query to display the member id, member name and date of registration who have not taken any book. 
+ANS: SELECT T1.MEMBER_ID,MEMBER_NAME,DATE_REGISTER FROM LMS_MEMBERS T1 LEFT JOIN LMS_BOOK_ISSUE T2 ON T1.MEMBER_ID = T2.MEMBER_ID WHERE T2.MEMBER_ID IS NULL
+
+Problem # 8:
+Write a Query to display the member id and member name of the members who has not paid any fine in the year 2012.
+ANS:
+Using Sub Query:
+select t1.MEMBER_ID,(select t2.MEMBER_NAME from LMS_MEMBERS t2 where t1.MEMBER_ID=t2.MEMBER_ID)as MEMBER_NAME from LMS_BOOK_ISSUE t1 where t1.DATE_RETURN >=t1.DATE_RETURNED and year(t1.DATE_RETURNED)=2012
+
+(or)
+
+Using Join:
+select t1.MEMBER_ID,t2.MEMBER_NAME from LMS_BOOK_ISSUE t1 join LMS_MEMBERS t2 on t1.MEMBER_ID=t2.MEMBER_ID where t1.DATE_RETURN>=t1.DATE_RETURNED and YEAR(t1.DATE_RETURNED)=2012
+
+ 9:
+
+ANS:  select DATE_ISSUE,count(DATE_ISSUE) as NO_OF_BOOKS from LMS_BOOK_ISSUE group by DATE_ISSUE having COUNT(DATE_ISSUE)=(select MAX(counted) from (select COUNT(DATE_ISSUE) as counted from LMS_BOOK_ISSUE group by DATE_ISSUE) as t)
+
+ 10:
+Write a query to list the book title and supplier id for the books authored by “Herbert Schildt" and the book edition is 5 and supplied by supplier ‘S01’. 
+ANS:  select BOOK_TITLE,SUPPLIER_ID from LMS_BOOK_DETAILS where AUTHOR='Herbert Schildt' and BOOK_EDITION='5' and SUPPLIER_ID='S01'
+
+Problem # 11:
+Write a query to display the rack number and the number of books in each rack with alias name “NOOFBOOKS” and sort by rack number in ascending order.
+ANS:  select RACK_NUM,COUNT(book_code) as NO_OF_BOOKS from LMS_BOOK_DETAILS group by RACK_NUM
+
+Problem # 12:
+Write a query to display book issue number, member name, date or registration, date of expiry, book title, category author, price, date of issue, date of return, actual returned date,  fine amount. 
+ANS: 
+Select BOOK_ISSUE_NO,MEMBER_NAME,DATE_REGISTER,DATE_EXPIRE,BOOK_TITLE,CATEGORY, PRICE, DATE_ISSUE,DATE_RETURN,DATE_RETURNED,(select FINE_AMOUNT from LMS_FINE_DETAILS f where i.FINE_RANGE= f.FINE_RANGE)as FINE_AMOUNT from LMS_BOOK_ISSUE i,LMS_MEMBERS m,LMS_BOOK_DETAILS b where i.MEMBER_ID=m.MEMBER_ID and b.BOOK_CODE=i.BOOK_CODE
+Problem # 13:
+Write a query to display the book code, title, publish date of the books which is been published in the month of December. 
+ANS: select BOOK_CODE,BOOK_TITLE,PUBLISH_DATE from LMS_BOOK_DETAILS where MONTH(PUBLISH_DATE)='12'
+
+
+Problem # 14:
+Write a query to display the book code, book title, supplier name and price of the book which takes maximum price based on each supplier.
+ANS: select BOOK_CODE,BOOK_TITLE,SUPPLIER_NAME,PRICE from LMS_BOOK_DETAILS b inner join LMS_SUPPLIERS_DETAILS s on b.SUPPLIER_ID=s.SUPPLIER_ID where b.PRICE=(select MAX(PRICE) from LMS_BOOK_DETAILS k where b.SUPPLIER_ID=k.SUPPLIER_ID)
+
+Problem # 15:
+
+Write a query to display book code, book name, and publisher, how old the book is. Sorted as older to newer.
+ANS: select BOOK_CODE,BOOK_TITLE,PUBLICATION,YEAR(GETDATE())-YEAR(DATE_ARRIVAL)as YEARS from LMS_BOOK_DETAILS order by YEARS desc;
